@@ -26,12 +26,16 @@ scaler = MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
+# Normalizar las etiquetas
+scaler_y = MinMaxScaler()
+y_train_scaled = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()  # Normaliza y convierte a 1D
+y_test_scaled = scaler_y.transform(y_test.reshape(-1, 1)).flatten()  # Normaliza y convierte a 1D
+
 # Guardar los datos normalizados en arreglos
 train_data = np.column_stack((X_train_scaled, y_train))
 test_data = np.column_stack((X_test_scaled, y_test))
-print("Primeras 5 filas del conjunto de entrenamiento:\n", train_data[:5])
-print("\nPrimeras 5 filas del conjunto de prueba:\n", test_data[:5])
 
+"""
 # Gráfica de la relación entre el número de habitaciones (RM) y el valor medio de la vivienda (MEDV)
 plt.figure(figsize=(8,6))
 sns.scatterplot(x=train_data[:, 5], y=train_data[:, -1])  
@@ -47,3 +51,4 @@ plt.title("Relación entre tasa de criminalidad (CRIM) y valor de la vivienda (M
 plt.xlabel("Tasa de criminalidad (CRIM)")
 plt.ylabel("Valor medio de la vivienda (MEDV)")
 plt.show()
+"""

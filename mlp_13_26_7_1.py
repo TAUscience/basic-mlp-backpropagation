@@ -1,6 +1,8 @@
 import numpy as np
 
 from graficar import graficar_error_tiempo as graficar_et
+from data import y_train_scaled, y_test_scaled
+from data import X_train_scaled, X_test_scaled
 
 def derivada_relu(arr):
     return np.where(arr > 0, 1, 0)
@@ -9,33 +11,27 @@ def calcular_ECM(y_true, y_pred):
     return np.mean((y_true - y_pred) ** 2)
 
 
-X_train = np.array(([0.7,0.8,0.7,0.8,0.7,0.8,0.7,0.8,0.7,0.8,0.7,0.8,0.9],
-             [0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.6],
-             [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.3],
-             [0.2,0.1,0.2,0.1,0.2,0.1,0.2,0.1,0.2,0.1,0.2,0.1,0.2]))
-y_train = np.array([0.1,0.2,0.8,0.9])
+X_train = X_train_scaled
+y_train = y_train_scaled
 
-X_test = np.array(([0.8,0.8,0.6,0.8,0.7,0.8,0.7,0.8,0.7,0.8,0.7,0.8,0.9],
-             [0.8,0.8,0.8,0.8,0.8,0.8,0.9,0.9,0.9,0.8,0.8,0.8,0.6],
-             [0.2,0.2,0.2,0.1,0.2,0.2,0.23,0.28,0.2,0.2,0.2,0.2,0.3],
-             [0.2,0.3,0.2,0.1,0.2,0.19,0.2,0.1,0.2,0.1,0.2,0.1,0.2]))
-y_test = np.array([0.1,0.2,0.8,0.9])
+X_test = X_test_scaled
+y_test = y_test_scaled
 
 #Definir una 13+1 26+1 7+1 1
 
-#Pesos
-np.random.seed(333)
-W1 = np.random.rand(27, 14) * 0.1
-W2 = np.random.rand(8, 27) * 0.1
-W3 = np.random.rand(1, 8) * 0.1
+#Pesos 109304
+np.random.seed(2**4)
+W1 = np.random.rand(27, 14)*0.1
+W2 = np.random.rand(8, 27)*0.1
+W3 = np.random.rand(1, 8) *0.1
 
 epocas = 200
 error_test = np.empty((0,))
 error_tiempo = np.empty((0,))
 bias = 1
-tasa_aprendizaje = 0.09
+tasa_aprendizaje = 0.01
 regularizacion = "L2"
-lambda_reg = 0.01
+lambda_reg = 0.0001
 
 for epoca in range(epocas):
 
