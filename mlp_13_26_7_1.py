@@ -23,15 +23,15 @@ y_test = y_test_scaled
 np.random.seed(2**4)
 W1 = np.random.rand(27, 14)*0.1
 W2 = np.random.rand(8, 27)*0.1
-W3 = np.random.rand(1, 8) *0.1
+W3 = np.random.rand(1, 8)*0.1
 
-epocas = 200
+epocas = 5000
 error_test = np.empty((0,))
 error_tiempo = np.empty((0,))
 bias = 1
-tasa_aprendizaje = 0.01
+tasa_aprendizaje = 0.00001
 regularizacion = "L2"
-lambda_reg = 0.0001
+lambda_reg = 0.1
 
 for epoca in range(epocas):
 
@@ -56,7 +56,7 @@ for epoca in range(epocas):
         z2[-1] = bias
 
         suma3 = np.dot(W3,z2)
-        z3 = np.maximum(0,suma3)
+        z3 = suma3
         y_pred_train = np.append(y_pred_train,z3)
 
         #Calculo del error
@@ -108,7 +108,7 @@ for epoca in range(epocas):
         z2[-1] = bias
 
         suma3 = np.dot(W3,z2)
-        z3 = np.maximum(0,suma3)
+        z3 = suma3
         y_pred_test = np.append(y_pred_test,z3)
 
         #Calculo del error
