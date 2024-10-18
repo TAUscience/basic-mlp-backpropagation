@@ -7,41 +7,43 @@ import numpy as np
 
 data_url = "http://lib.stat.cmu.edu/datasets/boston"
 
-# Para saltar las primera 22 lineas que no contienen datos 
+# Para saltar las primeras 22 líneas que no contienen datos 
 raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
 
-# Unión de las 2 filas par un único registro, cada registro tiene 2 filas.
+# Unión de las 2 filas para un único registro, cada registro tiene 2 filas.
 data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
 target = raw_df.values[1::2, 2]
 
-column_names = [
-    'CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT'
-]
-X = pd.DataFrame(data, columns=column_names)
+# Creación de un arreglo con las características (X) y la etiqueta (y)
+X = np.array(data)
+y = np.array(target)
 
-# Crear un DataFrame con el valor medio de la vivienda (MEDV)
-y = pd.DataFrame(target, columns=["MEDV"])
-
-# División del dataset
+# División del dataset en entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Normalizar 
+# Normalizar los datos
 scaler = MinMaxScaler()
-
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-df_train = pd.DataFrame(X_train, columns=column_names)
-df_train["MEDV"] = y_train.values
+# Guardar los datos normalizados en arreglos
+train_data = np.column_stack((X_train_scaled, y_train))
+test_data = np.column_stack((X_test_scaled, y_test))
+print("Primeras 5 filas del conjunto de entrenamiento:\n", train_data[:5])
+print("\nPrimeras 5 filas del conjunto de prueba:\n", test_data[:5])
 
-# Relación entre el número de habitaciones (RM) y el valor medio de la vivienda (MEDV)
+# Gráfica de la relación entre el número de habitaciones (RM) y el valor medio de la vivienda (MEDV)
 plt.figure(figsize=(8,6))
-sns.scatterplot(x="RM", y="MEDV", data=df_train)
+sns.scatterplot(x=train_data[:, 5], y=train_data[:, -1])  
 plt.title("Relación entre número de habitaciones (RM) y valor de la vivienda (MEDV)")
+plt.xlabel("Número de habitaciones (RM)")
+plt.ylabel("Valor medio de la vivienda (MEDV)")
 plt.show()
 
-# Relación entre CRIM (tasa de criminalidad) y MEDV
+# Gráfica de la relación entre CRIM (tasa de criminalidad) y MEDV
 plt.figure(figsize=(8,6))
-sns.scatterplot(x="CRIM", y="MEDV", data=df_train)
+sns.scatterplot(x=train_data[:, 0], y=train_data[:, -1])  
 plt.title("Relación entre tasa de criminalidad (CRIM) y valor de la vivienda (MEDV)")
+plt.xlabel("Tasa de criminalidad (CRIM)")
+plt.ylabel("Valor medio de la vivienda (MEDV)")
 plt.show()
